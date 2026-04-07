@@ -55,7 +55,7 @@ Overall, none of the scores were particularly strong as the dataset only contain
 ### 1. Clone the repo
 
 ```bash
-git clone YOUR_GITHUB_REPO_URL
+git clone https://github.com/premkumar027/insurance_price_predictor
 cd insurance-cost-predictor
 ```
 
