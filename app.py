@@ -63,5 +63,5 @@ def predict_insurance_price(data: InsuranceData):
     prediction = model.predict(input_df)[0]
     actual_prediction = float(np.expm1(prediction))
 
-    return JSONResponse(status_code=200, content={'predicted amount': round(actual_prediction, 2)})
+    return JSONResponse(status_code=200, content={'predicted_amount': round(actual_prediction, 2)})
 
