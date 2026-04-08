@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+notebooks/
+data/
+*.ipynb
+uv.lock
+.python-version
+.git/
