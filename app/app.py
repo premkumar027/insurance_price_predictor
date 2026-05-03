@@ -14,6 +14,11 @@ with open(pickle_model_path, 'rb') as f:
 
 app = FastAPI()
 
+
+@app.get('/health')
+def health():
+    return {'status': 'ok'}
+
 # pydantic model to validate the input data
 class InsuranceData(BaseModel):
     age: Annotated[int, Field(..., gt=0, lt=125, description='Age of the user')]
