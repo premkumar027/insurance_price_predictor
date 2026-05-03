@@ -33,30 +33,52 @@ Overall, none of the scores were particularly strong as the dataset only contain
 ## Tech Stack
 
 - **ML**: scikit-learn, XGBoost, pandas, NumPy
-- **API**: FastAPI, Pydantic (with computed fields for feature engineering)
+- **API**: FastAPI, Uvicorn, Pydantic (with computed fields for feature engineering)
 - **Frontend**: Streamlit
+- **Containerisation**: Docker (multi-stage build), Docker Compose
 - **Serialization**: Pickle
 
 ## Project Structure
 
 ```
-├── app.py              # FastAPI backend with prediction endpoint
-├── frontend.py         # Streamlit frontend
-├── insurance.csv       # Dataset
-├── main.ipynb          # EDA, feature engineering, model training
-├── model.pkl           # Trained GradientBoosting model
+├── app/
+│   ├── app.py          # FastAPI backend with prediction endpoint
+│   ├── frontend.py     # Streamlit frontend
+│   └── model.pkl       # Trained GradientBoosting model
+├── data/
+│   └── insurance.csv   # Dataset
+├── notebooks/
+│   └── main.ipynb      # EDA, feature engineering, model training
+├── Dockerfile          # Multi-stage build (builder / api / frontend)
+├── docker-compose.yml  # Runs api and frontend as separate services
 ├── pyproject.toml      # Project config
-├── requirements.txt    # Dependencies
+├── requirements.txt    # Pinned dependencies
+├── uv.lock             # Locked dependency graph
 └── README.md
 ```
 
-## Setup
+## Running with Docker (recommended)
+
+```bash
+git clone https://github.com/premkumar027/insurance_price_predictor
+cd insurance-price-predictor/insurance_price_predictor
+docker compose up --build
+```
+
+| Service  | URL                    |
+|----------|------------------------|
+| Frontend | http://localhost:8501  |
+| API      | http://localhost:8000  |
+
+The frontend waits for the API to pass its healthcheck before starting.
+
+## Running Locally (without Docker)
 
 ### 1. Clone the repo
 
 ```bash
 git clone https://github.com/premkumar027/insurance_price_predictor
-cd insurance-cost-predictor
+cd insurance-price-predictor/insurance_price_predictor
 ```
 
 ### 2. Install dependencies
@@ -68,13 +90,13 @@ pip install -r requirements.txt
 ### 3. Run the API
 
 ```bash
-uvicorn app:app --reload
+uvicorn app.app:app --reload
 ```
 
 ### 4. Run the Streamlit app (in a separate terminal)
 
 ```bash
-streamlit run frontend.py
+streamlit run app/frontend.py
 ```
 
 The app will open at `http://localhost:8501`. Enter patient details and click **Predict Cost**.
@@ -101,6 +123,13 @@ Response:
 {
   "predicted_amount": 38169.79
 }
+```
+
+Health check:
+
+```bash
+curl http://localhost:8000/health
+# {"status":"ok"}
 ```
 
 ## Dataset
